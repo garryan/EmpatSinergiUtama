@@ -6,7 +6,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>PT. Empat Sinergi Utama</title>
     
-    <!-- Favicon (Logo di Tab Browser) -->
     <link rel="icon" type="image/png" href="logo.png">
     
     <meta name="description" content="PT. Empat Sinergi Utama - Penyedia Layanan Solusi Human Resources dan Building Maintenance Terbaik dan Terpercaya.">
@@ -175,6 +174,52 @@
                 clip-path: polygon(0 25%, 50% 100%, 0 100%);
             }
         }
+
+        /* ==========================================
+           UPGRADE STYLE: MODAL & PROTEKSI DOKUMEN
+           ========================================== */
+        .modal-blur-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(43, 35, 37, 0.5);
+            backdrop-filter: blur(8px);
+            z-index: 100;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            pointer-events: none;
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .modal-blur-overlay.active {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        /* Container Dokumen Aman (View Only) */
+        .secure-view-container {
+            position: relative;
+            width: 100%;
+            height: 70vh;
+            background: #f4f2ee;
+            overflow-y: auto;
+            user-select: none;
+            -webkit-user-select: none;
+        }
+        
+        /* Lapisan Watermark Pelindung Screenshot & Capture */
+        .secure-overlay-watermark {
+            position: absolute;
+            inset: 0;
+            z-index: 99;
+            pointer-events: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160' viewBox='0 0 160 160'%3E%3Ctext fill='%23580c12' opacity='0.07' font-family='sans-serif' font-size='10' font-weight='bold' transform='rotate(-30 80 80)' text-anchor='middle'%3EPT. ESU - VIEW ONLY%3C/text%3E%3C/svg%3E");
+        }
+        
+        /* Proteksi cetak media hardcopy */
+        @media print {
+            body { display: none !important; }
+        }
     </style>
 </head>
 <body class="city-overlay-bg overflow-x-hidden">
@@ -191,7 +236,6 @@
                 </div>
             </a>
             
-            <!-- FIXED: Menyesuaikan gap-6 dan menambahkan class whitespace-nowrap pada tiap teks menu -->
             <nav class="hidden lg:flex items-center gap-6 menu-wrapper-desktop flex-shrink-0">
                 <a href="#" class="text-xs font-bold uppercase tracking-wider nav-link whitespace-nowrap">Home</a>
                 <a href="#about" class="text-xs font-bold uppercase tracking-wider nav-link whitespace-nowrap">Who We Are</a>
@@ -200,7 +244,6 @@
                 <a href="mailto:manpower.services@empatsinergiutama.co.id" class="px-5 py-2.5 bg-[#580c12] text-white rounded-lg text-xs font-bold tracking-widest uppercase hover:bg-[#3d070b] transition-all duration-300 shadow-md whitespace-nowrap flex-shrink-0">Contact Us</a>
             </nav>
 
-            <!-- Tombol burger disesuaikan warnanya agar aman terbaca di sisi kanan -->
             <button onclick="toggleMobileMenu()" id="burgerBtn" class="lg:hidden text-[#580c12] text-2xl focus:outline-none cursor-pointer p-1">
                 <i id="menuIcon" class="fa-solid fa-bars-staggered"></i>
             </button>
@@ -218,7 +261,6 @@
     </header>
 
     <section class="relative min-h-screen flex items-center justify-center pt-24 overflow-hidden">
-        <!-- Geometri Elements -->
         <div class="geo-top-maroon"></div>
         <div class="geo-bottom-gold"></div>
 
@@ -244,6 +286,9 @@
                 <a href="#about" class="w-full sm:w-auto text-center px-8 py-4 bg-white hover:bg-gray-50 text-gray-800 font-semibold rounded-lg border border-gray-200 shadow-xs transition-all duration-300 text-xs uppercase tracking-wide">
                     Who We Are
                 </a>
+                <button onclick="openFormModal()" class="w-full sm:w-auto text-center px-8 py-4 bg-[#ba8b25] hover:bg-[#99701a] text-white font-bold rounded-lg shadow-xl tracking-wide text-xs uppercase transition-all duration-300 cursor-pointer flex items-center justify-center gap-2">
+                    <i class="fa-solid fa-file-shield"></i> Lihat Legalitas Perusahaan
+                </button>
             </div>
         </div>
     </section>
@@ -420,6 +465,59 @@
         </div>
     </footer>
 
+    <div id="formModal" class="modal-blur-overlay">
+        <div class="bg-white p-8 rounded-3xl max-w-md w-full shadow-2xl relative mx-4">
+            <button onclick="closeFormModal()" class="absolute top-4 right-4 text-gray-400 hover:text-gray-700 transition-colors">
+                <i class="fa-solid fa-xmark text-lg"></i>
+            </button>
+            <h3 class="text-xl font-bold text-[#580c12] mb-1 uppercase tracking-wide font-heading">Hak Akses Dokumen</h3>
+            <p class="text-xs text-gray-500 mb-6">Mohon isi data verifikasi instansi Anda secara valid untuk membuka dokumen legalitas resmi PT. ESU.</p>
+            
+            <form id="legalitasForm" onsubmit="handleFormSubmission(event)" class="space-y-4">
+                <div>
+                    <label class="block text-xs font-bold uppercase text-gray-700 mb-1">Nama Lengkap</label>
+                    <input type="text" id="clientName" required class="w-full px-4 py-2.5 text-sm bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:border-[#ba8b25] focus:bg-white transition-all">
+                </div>
+                <div>
+                    <label class="block text-xs font-bold uppercase text-gray-700 mb-1">No. Handphone / WhatsApp</label>
+                    <input type="tel" id="clientPhone" required placeholder="08xxxxxxxxxx" class="w-full px-4 py-2.5 text-sm bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:border-[#ba8b25] focus:bg-white transition-all">
+                </div>
+                <div>
+                    <label class="block text-xs font-bold uppercase text-gray-700 mb-1">Email Perusahaan / Instansi</label>
+                    <input type="email" id="clientEmail" required placeholder="nama@instansi.com" class="w-full px-4 py-2.5 text-sm bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:border-[#ba8b25] focus:bg-white transition-all">
+                </div>
+                <button type="submit" id="submitBtn" class="w-full py-3.5 bg-[#580c12] hover:bg-[#3d070b] text-white font-bold rounded-xl text-xs uppercase tracking-wider shadow-md transition-all duration-300">
+                    Validasi & Buka Dokumen
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <div id="secureDocModal" class="modal-blur-overlay">
+        <div class="bg-white p-6 rounded-3xl max-w-4xl w-full shadow-2xl relative mx-4 flex flex-col">
+            <div class="flex justify-between items-center border-b border-gray-100 pb-3 mb-4">
+                <div class="flex items-center gap-2 text-[#580c12] font-bold text-xs uppercase tracking-wider font-heading">
+                    <i class="fa-solid fa-circle-shield text-green-600 animate-pulse"></i> Console Dokumen Resmi View-Only
+                </div>
+                <button onclick="closeSecureDocModal()" class="px-4 py-1.5 bg-red-50 text-red-600 font-bold rounded-lg text-xs hover:bg-red-100 transition-colors cursor-pointer">
+                    Tutup Akses
+                </button>
+            </div>
+            
+            <div class="secure-view-container" id="secureViewer">
+                <div class="secure-overlay-watermark"></div>
+                <div class="p-4 space-y-6 select-none flex flex-col items-center">
+                    <img src="https://images.unsplash.com/photo-1568605117036-5fe5e7bab0b7?auto=format&fit=crop&w=1000&q=80" alt="Legalitas Dokumen Utama" class="w-full max-w-3xl border border-gray-200 shadow-sm pointer-events-none">
+                    <img src="https://images.unsplash.com/photo-1554415707-6e8cfc93fe23?auto=format&fit=crop&w=1000&q=80" alt="Legalitas Lampiran Tambahan" class="w-full max-w-3xl border border-gray-200 shadow-sm pointer-events-none">
+                </div>
+            </div>
+            
+            <div class="text-center mt-3 text-[10px] text-gray-400 font-medium">
+                Dokumen dilindungi oleh enkapsulasi firewall internal PT. ESU. Hak cipta terikat hukum. Segala jenis screenshot, simpan berkas, cetak dokumen, atau bypass elemen diblokir otomatis.
+            </div>
+        </div>
+    </div>
+
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
     <script>
@@ -459,6 +557,86 @@
                 icon.classList.remove('icon-spin', 'fa-xmark');
                 icon.classList.add('fa-bars-staggered');
             }
+        }
+
+        /* ==========================================
+           UPGRADE JAVASCRIPT: ACTION MODAL & SHEETS
+           ========================================== */
+        
+        // GANTI DI SINI: Tempel tautan URL Web App hasil Deploy dari Google Apps Script Anda
+        const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzXXXXXXXXXXXXX/exec";
+
+        function openFormModal() {
+            document.getElementById('formModal').classList.add('active');
+        }
+        
+        function closeFormModal() {
+            document.getElementById('formModal').classList.remove('active');
+        }
+        
+        function closeSecureDocModal() {
+            document.getElementById('secureDocModal').classList.remove('active');
+        }
+
+        // Pengiriman Data ke Google Sheets
+        function handleFormSubmission(event) {
+            event.preventDefault();
+            const submitBtn = document.getElementById('submitBtn');
+            submitBtn.disabled = true;
+            submitBtn.innerText = "Memverifikasi Akses...";
+
+            const payload = {
+                nama: document.getElementById('clientName').value,
+                whatsapp: document.getElementById('clientPhone').value,
+                email: document.getElementById('clientEmail').value,
+                timestamp: new Date().toLocaleString('id-ID')
+            };
+
+            // Kirim data secara asynchronous ke sistem Google Web App
+            fetch(GOOGLE_SCRIPT_URL, {
+                method: "POST",
+                mode: "no-cors",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(payload)
+            }).then(() => {
+                // Bersihkan form & hilangkan modal input pendaftaran
+                closeFormModal();
+                document.getElementById('legalitasForm').reset();
+                submitBtn.disabled = false;
+                submitBtn.innerText = "Validasi & Buka Dokumen";
+                
+                // Munculkan layar proteksi dokumen view-only resmi
+                document.getElementById('secureDocModal').classList.add('active');
+                initiateAntiScreenshotDefenses();
+            }).catch(err => {
+                alert("Gangguan koneksi sistem database. Silakan periksa jaringan internet Anda.");
+                submitBtn.disabled = false;
+                submitBtn.innerText = "Validasi & Buka Dokumen";
+            });
+        }
+
+        // Inisialisasi Fungsi Pengaman Anti-Tangkapan Layar & Salin Data
+        function initiateAntiScreenshotDefenses() {
+            const viewer = document.getElementById('secureViewer');
+
+            // 1. Blokir Klik Kanan (Context Menu) di Dalam Area Preview
+            viewer.addEventListener('contextmenu', e => e.preventDefault());
+
+            // 2. Blokir Kombinasi Tombol Simpan (Ctrl+S / Cmd+S), Cetak (Ctrl+P / Cmd+P), dan Inspeksi Elemen
+            document.addEventListener('keydown', function(e) {
+                if (e.ctrlKey && (e.key === 's' || e.key === 'p' || e.key === 'u' || e.key === 'c')) {
+                    e.preventDefault();
+                }
+                if (e.metaKey && (e.key === 's' || e.key === 'p' || e.key === 'c')) {
+                    e.preventDefault();
+                }
+            });
+
+            // 3. Rekayasa Clipboard Kosong Otomatis Saat Mencoba Menyalin
+            document.addEventListener('copy', e => {
+                e.clipboardData.setData('text/plain', 'Akses Diblokir - Dokumen PT. Empat Sinergi Utama Bersifat Rahasia View-Only.');
+                e.preventDefault();
+            });
         }
     </script>
 </body>
