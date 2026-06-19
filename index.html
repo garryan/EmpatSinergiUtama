@@ -157,7 +157,6 @@
             }
         }
 
-        /* Tampilan Geometri di Desktop */
         @media (min-width: 1024px) {
             .geo-top-maroon {
                 width: 66.666667%;
@@ -172,12 +171,12 @@
         }
 
         /* ==========================================
-           UPGRADE STYLE: SECURE VIEW MODAL STYLING
+           UPGRADE STYLE: SECURE BLUR & SCREEN MODAL
            ========================================== */
         .modal-blur-overlay {
             position: fixed;
             inset: 0;
-            background: rgba(43, 35, 37, 0.5);
+            background: rgba(43, 35, 37, 0.6);
             backdrop-filter: blur(8px);
             z-index: 100;
             display: flex;
@@ -192,39 +191,62 @@
             pointer-events: auto;
         }
 
-        /* Container Dokumen Aman (View Only) */
+        /* Container Dokumen Aman (View Only) dengan scroll optimal di HP */
         .secure-view-container {
             position: relative;
             width: 100%;
-            height: 70vh;
-            background: #f4f2ee;
+            height: 65vh;
+            background: #e6e4e0;
             overflow-y: auto;
+            overflow-x: hidden;
             user-select: none;
             -webkit-user-select: none;
+            transition: filter 0.2s ease;
         }
         
-        /* Lapisan Watermark Pelindung Screenshot & Capture */
+        /* Celah Rekayasa: Jika HP Kehilangan Fokus (Trigger Kombinasi Tombol SS), Halaman akan Blur */
+        .secure-view-container.blurred-defense {
+            filter: blur(35px) grayscale(1) !important;
+            background: #111111 !important;
+        }
+        
+        /* Lapisan Watermark Pelindung Screenshot Dinamis */
         .secure-overlay-watermark {
             position: absolute;
             inset: 0;
             z-index: 99;
             pointer-events: none;
-            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160' viewBox='0 0 160 160'%3E%3Ctext fill='%23580c12' opacity='0.07' font-family='sans-serif' font-size='10' font-weight='bold' transform='rotate(-30 80 80)' text-anchor='middle'%3EPT. ESU - VIEW ONLY%3C/text%3E%3C/svg%3E");
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180' viewBox='0 0 180 180'%3E%3Ctext fill='%23580c12' opacity='0.08' font-family='sans-serif' font-size='9' font-weight='bold' transform='rotate(-30 90 90)' text-anchor='middle'%3EPT. ESU - PROPRIETARY DOCUMENT%3C/text%3E%3C/svg%3E");
         }
         
-        /* Proteksi Cetak / Print Media */
+        /* Proteksi Cetak Maksimal */
         @media print {
-            body { display: none !important; }
+            body, html, .modal-blur-overlay, #secureDocModal { display: none !important; opacity: 0 !important; }
+        }
+
+        /* Custom Elegant Corporate Loader Rings */
+        .corporate-spinner {
+            width: 45px;
+            height: 45px;
+            border: 4px solid rgba(88, 12, 18, 0.1);
+            border-top: 4px solid #580c12;
+            border-bottom: 4px solid #ba8b25;
+            border-radius: 50%;
+            animation: spinCorporate 1.2s cubic-bezier(0.68, -0.55, 0.27, 1.55) infinite;
+        }
+        @keyframes spinCorporate {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
         }
     </style>
 </head>
 <body class="city-overlay-bg overflow-x-hidden">
 
     <header id="mainHeader" class="fixed top-0 left-0 w-full z-50 transition-all duration-300 py-5">
-        <div class="container mx-auto px-6 lg:px-16 flex justify-between items-center">
+        <div class="container mx-auto px-4 sm:px-6 lg:px-16 flex justify-between items-center">
             <a href="#" class="flex items-center gap-3">
                 <div class="bg-white p-1.5 rounded-xl shadow-md border border-gray-100 flex-shrink-0">
-                    <img src="logo.png" alt="PT. Empat Sinergi Utama Logo" class="h-10 object-contain">
+                    <img src="logo.png" alt="PT. Empat Sinergi Utama Logo" class="h-9 sm:h-10 object-contain">
                 </div>
                 <div class="hidden sm:block">
                     <span id="brandTitle" class="block text-xs font-bold tracking-widest text-[#580c12] transition-colors duration-300">PT. EMPAT SINERGI UTAMA</span>
@@ -245,7 +267,7 @@
             </button>
         </div>
 
-        <div id="mobileMenu" class="container mx-auto px-6 lg:hidden">
+        <div id="mobileMenu" class="container mx-auto px-4 lg:hidden">
             <div class="mt-2 bg-white/95 border border-gray-200/60 shadow-2xl rounded-2xl p-6 flex flex-col gap-4 text-center backdrop-blur-md">
                 <a onclick="toggleMobileMenu()" href="#" class="text-sm font-bold text-gray-800 py-2.5 border-b border-gray-50 hover:text-[#580c12] transition-colors">Home</a>
                 <a onclick="toggleMobileMenu()" href="#about" class="text-sm font-bold text-gray-800 py-2.5 border-b border-gray-50 hover:text-[#580c12] transition-colors">Who We Are</a>
@@ -256,26 +278,26 @@
         </div>
     </header>
 
-    <section class="relative min-h-screen flex items-center justify-center pt-24 overflow-hidden">
+    <section class="relative min-h-screen flex items-center justify-center pt-28 pb-12 overflow-hidden">
         <div class="geo-top-maroon"></div>
         <div class="geo-bottom-gold"></div>
 
-        <div class="container mx-auto px-6 lg:px-16 text-center lg:text-left relative z-10" data-aos="fade-up" data-aos-duration="1200">
+        <div class="container mx-auto px-4 sm:px-6 lg:px-16 text-center lg:text-left relative z-10" data-aos="fade-up" data-aos-duration="1200">
             <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[#580c12]/5 border border-[#ba8b25]/40 mb-6 shadow-xs">
                 <span class="w-2 h-2 rounded-full bg-[#ba8b25] animate-pulse"></span>
                 <span class="text-[10px] font-bold tracking-widest text-[#ba8b25] uppercase">PT. Empat Sinergi Utama</span>
             </div>
 
-            <h1 class="text-4xl md:text-6xl lg:text-7xl font-black tracking-tight text-gray-900 mb-6 leading-none uppercase">
+            <h1 class="text-3xl md:text-6xl lg:text-7xl font-black tracking-tight text-gray-900 mb-6 leading-tight uppercase">
                 WE ARE YOUR <br class="hidden lg:block">
                 <span class="premium-text-maroon">SOLUTION</span>
             </h1>
             
-            <p class="text-gray-600 text-sm md:text-base max-w-xl mb-10 font-medium leading-relaxed">
+            <p class="text-gray-600 text-xs sm:text-sm md:text-base max-w-xl mb-10 font-medium leading-relaxed px-1">
                 Penyedia Solusi Terintegrasi Kebutuhan Operasional Bisnis, Manajemen Fasilitas Gedung, dan Pemenuhan Ketenagakerjaan Ahli.
             </p>
 
-            <div class="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4 flex-wrap">
+            <div class="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4 flex-wrap px-2 sm:px-0">
                 <a href="#services" class="w-full sm:w-auto text-center px-8 py-4 bg-[#580c12] hover:bg-[#3d070b] text-white font-bold rounded-lg shadow-xl tracking-wide text-xs uppercase transition-all duration-300">
                     Explore Our Services
                 </a>
@@ -289,24 +311,24 @@
         </div>
     </section>
 
-    <section id="about" class="py-24 bg-white border-y border-gray-200/40 relative z-10">
-        <div class="container mx-auto px-6 lg:px-16">
+    <section id="about" class="py-20 bg-white border-y border-gray-200/40 relative z-10">
+        <div class="container mx-auto px-4 sm:px-6 lg:px-16">
             <div class="grid lg:grid-cols-12 gap-12 items-center">
                 <div class="lg:col-span-7" data-aos="fade-right">
                     <p class="color-gold font-bold tracking-wider text-xs uppercase mb-3">About Us</p>
-                    <h2 class="text-3xl md:text-4xl font-extrabold text-gray-950 mb-6 leading-tight">Mitra Strategis Ketenagakerjaan Anda</h2>
-                    <p class="text-gray-600 mb-4 text-justify text-sm leading-relaxed">
+                    <h2 class="text-2xl sm:text-3xl md:text-4xl font-extrabold text-gray-950 mb-6 leading-tight">Mitra Strategis Ketenagakerjaan Anda</h2>
+                    <p class="text-gray-600 mb-4 text-justify text-xs sm:text-sm leading-relaxed">
                         PT. Empat Sinergi Utama adalah perusahaan penyedia tenaga kerja alih daya yang berkomitmen memberikan solusi terbaik untuk kebutuhan operasional bisnis Anda. Dengan tim profesional lebih dari 15 tahun berpengalaman di bidangnya, kami mampu menyediakan layanan berupa sumber daya manusia yang berkualitas dan berdedikasi tinggi.
                     </p>
-                    <p class="text-gray-600 text-sm text-justify leading-relaxed">
+                    <p class="text-gray-600 text-xs sm:text-sm text-justify leading-relaxed">
                         Sumber daya manusia yang kami miliki adalah tenaga kerja yang sudah dibekali pelatihan di bidangnya masing-masing, siap bekerja dan mampu menyesuaikan dengan kebutuhan serta standar operasional perusahaan klien.
                     </p>
                 </div>
                 
                 <div class="lg:col-span-5 bg-[#fdfcfb] p-6 md:p-8 rounded-2xl border-l-4 border-[#580c12] shadow-sm" data-aos="fade-left">
                     <span class="text-[10px] font-bold text-[#ba8b25] tracking-widest uppercase block mb-1">Corporate Leadership</span>
-                    <h3 class="text-lg font-bold text-gray-900 mb-3">Rekam Jejak Teruji</h3>
-                    <p class="text-xs text-gray-500 leading-relaxed text-justify">
+                    <h3 class="text-base sm:text-lg font-bold text-gray-900 mb-3">Rekam Jejak Teruji</h3>
+                    <p class="text-[11px] sm:text-xs text-gray-500 leading-relaxed text-justify">
                         Dengan pengalaman CEO selama lebih dari 15 tahun bekerja di industri Penyedia Jasa Tenaga Kerja Non Grade dan telah mendukung lebih dari 50 perusahaan multinasional dalam mengelola tenaga kerja, memastikan target bisnis tercapai tepat waktu dan sesuai anggaran.
                     </p>
                     <div class="mt-4 pt-4 border-t border-gray-100 flex items-center justify-between text-xs text-[#580c12] font-bold italic">
@@ -317,104 +339,104 @@
         </div>
     </section>
 
-    <section id="services" class="py-24 relative z-10">
-        <div class="container mx-auto px-6 lg:px-16">
-            <div class="text-center max-w-2xl mx-auto mb-16">
+    <section id="services" class="py-20 relative z-10">
+        <div class="container mx-auto px-4 sm:px-6 lg:px-16">
+            <div class="text-center max-w-2xl mx-auto mb-12">
                 <p class="color-gold font-bold tracking-wider text-xs uppercase mb-2">Our Capabilities</p>
-                <h2 class="text-2xl md:text-4xl font-extrabold text-gray-900 mb-4">LAYANAN ALIH DAYA KAMI</h2>
+                <h2 class="text-2xl sm:text-3xl md:text-4xl font-extrabold text-gray-900 mb-4">LAYANAN ALIH DAYA KAMI</h2>
                 <div class="h-[2px] w-16 bg-[#580c12] mx-auto"></div>
             </div>
 
-            <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-7 gap-6 px-2">
+            <div class="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-7 gap-4 sm:gap-6 px-1">
                 
                 <div class="flex flex-col items-center text-center gap-3" data-aos="fade-up" data-aos-delay="50">
-                    <div class="w-16 h-16 rounded-full premium-icon-btn flex items-center justify-center text-[#580c12] text-xl">
+                    <div class="w-14 h-14 sm:w-16 sm:h-16 rounded-full premium-icon-btn flex items-center justify-center text-[#580c12] text-lg sm:text-xl">
                         <i class="fa-solid fa-shield-halved"></i>
                     </div>
-                    <span class="text-[10px] md:text-[11px] font-bold tracking-wider text-gray-800 uppercase px-1">Jasa Keamanan</span>
+                    <span class="text-[9px] sm:text-[11px] font-bold tracking-wider text-gray-800 uppercase px-1">Jasa Keamanan</span>
                 </div>
 
                 <div class="flex flex-col items-center text-center gap-3" data-aos="fade-up" data-aos-delay="100">
-                    <div class="w-16 h-16 rounded-full premium-icon-btn flex items-center justify-center text-[#580c12] text-xl">
+                    <div class="w-14 h-14 sm:w-16 sm:h-16 rounded-full premium-icon-btn flex items-center justify-center text-[#580c12] text-lg sm:text-xl">
                         <i class="fa-solid fa-broom"></i>
                     </div>
-                    <span class="text-[10px] md:text-[11px] font-bold tracking-wider text-gray-800 uppercase px-1">Jasa Kebersihan</span>
+                    <span class="text-[9px] sm:text-[11px] font-bold tracking-wider text-gray-800 uppercase px-1">Jasa Kebersihan</span>
                 </div>
 
                 <div class="flex flex-col items-center text-center gap-3" data-aos="fade-up" data-aos-delay="150">
-                    <div class="w-16 h-16 rounded-full premium-icon-btn flex items-center justify-center text-[#580c12] text-xl">
+                    <div class="w-14 h-14 sm:w-16 sm:h-16 rounded-full premium-icon-btn flex items-center justify-center text-[#580c12] text-lg sm:text-xl">
                         <i class="fa-solid fa-user-tie"></i>
                     </div>
-                    <span class="text-[10px] md:text-[11px] font-bold tracking-wider text-gray-800 uppercase px-1">Tenaga Pendukung</span>
+                    <span class="text-[9px] sm:text-[11px] font-bold tracking-wider text-gray-800 uppercase px-1">Tenaga Pendukung</span>
                 </div>
 
                 <div class="flex flex-col items-center text-center gap-3" data-aos="fade-up" data-aos-delay="200">
-                    <div class="w-16 h-16 rounded-full premium-icon-btn flex items-center justify-center text-[#580c12] text-xl">
+                    <div class="w-14 h-14 sm:w-16 sm:h-16 rounded-full premium-icon-btn flex items-center justify-center text-[#580c12] text-lg sm:text-xl">
                         <i class="fa-solid fa-seedling"></i>
                     </div>
-                    <span class="text-[10px] md:text-[11px] font-bold tracking-wider text-gray-800 uppercase px-1">Perawatan Taman</span>
+                    <span class="text-[9px] sm:text-[11px] font-bold tracking-wider text-gray-800 uppercase px-1">Perawatan Taman</span>
                 </div>
 
                 <div class="flex flex-col items-center text-center gap-3" data-aos="fade-up" data-aos-delay="250">
-                    <div class="w-16 h-16 rounded-full premium-icon-btn flex items-center justify-center text-[#580c12] text-xl">
+                    <div class="w-14 h-14 sm:w-16 sm:h-16 rounded-full premium-icon-btn flex items-center justify-center text-[#580c12] text-lg sm:text-xl">
                         <i class="fa-solid fa-id-card"></i>
                     </div>
-                    <span class="text-[10px] md:text-[11px] font-bold tracking-wider text-gray-800 uppercase px-1">Jasa Pengemudi</span>
+                    <span class="text-[9px] sm:text-[11px] font-bold tracking-wider text-gray-800 uppercase px-1">Jasa Pengemudi</span>
                 </div>
 
                 <div class="flex flex-col items-center text-center gap-3" data-aos="fade-up" data-aos-delay="300">
-                    <div class="w-16 h-16 rounded-full premium-icon-btn flex items-center justify-center text-[#580c12] text-xl">
+                    <div class="w-14 h-14 sm:w-16 sm:h-16 rounded-full premium-icon-btn flex items-center justify-center text-[#580c12] text-lg sm:text-xl">
                         <i class="fa-solid fa-square-parking"></i>
                     </div>
-                    <span class="text-[10px] md:text-[11px] font-bold tracking-wider text-gray-800 uppercase px-1">Jasa Parkir</span>
+                    <span class="text-[9px] sm:text-[11px] font-bold tracking-wider text-gray-800 uppercase px-1">Jasa Parkir</span>
                 </div>
 
                 <div class="flex flex-col items-center text-center gap-3 col-span-2 sm:col-span-1 mx-auto sm:mx-0" data-aos="fade-up" data-aos-delay="350">
-                    <div class="w-16 h-16 rounded-full premium-icon-btn flex items-center justify-center text-[#580c12] text-xl">
+                    <div class="w-14 h-14 sm:w-16 sm:h-16 rounded-full premium-icon-btn flex items-center justify-center text-[#580c12] text-lg sm:text-xl">
                         <i class="fa-solid fa-calendar-day"></i>
                     </div>
-                    <span class="text-[10px] md:text-[11px] font-bold tracking-wider text-gray-800 uppercase px-1">Daily Worker</span>
+                    <span class="text-[9px] sm:text-[11px] font-bold tracking-wider text-gray-800 uppercase px-1">Daily Worker</span>
                 </div>
 
             </div>
 
-            <div class="mt-12 bg-white p-4 rounded-xl shadow-xs border border-gray-100 max-w-2xl mx-auto text-center text-xs text-gray-500 font-medium">
+            <div class="mt-12 bg-white p-4 rounded-xl shadow-xs border border-gray-100 max-w-2xl mx-auto text-center text-[11px] sm:text-xs text-gray-500 font-medium">
                 * Seluruh penempatan diikat kontrak sah melalui Perjanjian Kerja Waktu Tertentu (PKWT) dengan jaminan sistem skalabilitas personel yang adaptif.
             </div>
         </div>
     </section>
 
-    <section id="portfolio" class="py-24 bg-white border-t border-gray-200/40 relative z-10">
-        <div class="container mx-auto px-6 lg:px-16">
-            <div class="text-center max-w-2xl mx-auto mb-16">
+    <section id="portfolio" class="py-20 bg-white border-t border-gray-200/40 relative z-10">
+        <div class="container mx-auto px-4 sm:px-6 lg:px-16">
+            <div class="text-center max-w-2xl mx-auto mb-12">
                 <p class="color-gold font-bold tracking-wider text-xs uppercase mb-2">Proven Track Record</p>
-                <h2 class="text-2xl md:text-4xl font-extrabold text-gray-900">PROJECT PORTFOLIO</h2>
+                <h2 class="text-2xl sm:text-3xl md:text-4xl font-extrabold text-gray-900">PROJECT PORTFOLIO</h2>
                 <div class="h-[2px] w-16 bg-[#580c12] mx-auto mt-4"></div>
             </div>
 
-            <div class="grid grid-cols-2 md:grid-cols-4 gap-6 items-center text-center">
-                <div class="p-6 bg-[#fdfcfb] rounded-xl shadow-xs border border-gray-100 flex items-center justify-center h-28" data-aos="zoom-in" data-aos-delay="50">
-                    <span class="text-xs font-bold text-gray-700 tracking-wider">KEMENPORA RI</span>
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-4 sm:gap-6 items-center text-center">
+                <div class="p-4 sm:p-6 bg-[#fdfcfb] rounded-xl shadow-xs border border-gray-100 flex items-center justify-center h-24 sm:h-28" data-aos="zoom-in" data-aos-delay="50">
+                    <span class="text-[11px] sm:text-xs font-bold text-gray-700 tracking-wider">KEMENPORA RI</span>
                 </div>
-                <div class="p-6 bg-[#fdfcfb] rounded-xl shadow-xs border border-gray-100 flex items-center justify-center h-28" data-aos="zoom-in" data-aos-delay="100">
-                    <span class="text-xs font-bold text-gray-700 tracking-wider">KOTA TANGERANG SELATAN</span>
+                <div class="p-4 sm:p-6 bg-[#fdfcfb] rounded-xl shadow-xs border border-gray-100 flex items-center justify-center h-24 sm:h-28" data-aos="zoom-in" data-aos-delay="100">
+                    <span class="text-[11px] sm:text-xs font-bold text-gray-700 tracking-wider">KOTA TANGERANG SELATAN</span>
                 </div>
-                <div class="p-6 bg-[#fdfcfb] rounded-xl shadow-xs border border-gray-100 flex items-center justify-center h-28" data-aos="zoom-in" data-aos-delay="150">
-                    <span class="text-xs font-bold text-gray-700 tracking-wider">BAPPELITBANGDA TANGSEL</span>
+                <div class="p-4 sm:p-6 bg-[#fdfcfb] rounded-xl shadow-xs border border-gray-100 flex items-center justify-center h-24 sm:h-28" data-aos="zoom-in" data-aos-delay="150">
+                    <span class="text-[11px] sm:text-xs font-bold text-gray-700 tracking-wider">BAPPELITBANGDA TANGSEL</span>
                 </div>
-                <div class="p-6 bg-[#fdfcfb] rounded-xl shadow-xs border border-gray-100 flex items-center justify-center h-28" data-aos="zoom-in" data-aos-delay="200">
-                    <span class="text-xs font-bold text-gray-700 tracking-wider">BKAD TANGSEL</span>
+                <div class="p-4 sm:p-6 bg-[#fdfcfb] rounded-xl shadow-xs border border-gray-100 flex items-center justify-center h-24 sm:h-28" data-aos="zoom-in" data-aos-delay="200">
+                    <span class="text-[11px] sm:text-xs font-bold text-gray-700 tracking-wider">BKAD TANGSEL</span>
                 </div>
             </div>
             
-            <p class="text-[11px] text-gray-400 text-center italic mt-8 leading-relaxed max-w-xl mx-auto">
+            <p class="text-[10px] sm:text-[11px] text-gray-400 text-center italic mt-8 leading-relaxed max-w-xl mx-auto px-2">
                 Serta dipercaya mendukung pengerjaan proyek harian (Daily Worker) entitas swasta strategis nasional.
             </p>
         </div>
     </section>
 
     <footer id="contact" class="bg-[#580c12] text-white pt-16 pb-12 rounded-t-[32px] relative z-10 shadow-2xl">
-        <div class="container mx-auto px-6 lg:px-16 grid md:grid-cols-12 gap-8 mb-12">
+        <div class="container mx-auto px-4 sm:px-6 lg:px-16 grid md:grid-cols-12 gap-8 mb-12">
             
             <div class="md:col-span-5">
                 <div class="bg-white inline-block p-2 rounded-xl mb-4 shadow-md">
@@ -462,27 +484,33 @@
     </footer>
 
     <div id="formModal" class="modal-blur-overlay">
-        <div class="bg-white p-8 rounded-3xl max-w-md w-full shadow-2xl relative mx-4">
-            <button onclick="closeFormModal()" class="absolute top-4 right-4 text-gray-400 hover:text-gray-700 transition-colors">
+        <div class="bg-white p-6 sm:p-8 rounded-3xl max-w-md w-full max-h-[92vh] overflow-y-auto shadow-2xl relative mx-4">
+            <button onclick="closeFormModal()" class="absolute top-4 right-4 text-gray-400 hover:text-gray-700 transition-colors cursor-pointer">
                 <i class="fa-solid fa-xmark text-lg"></i>
             </button>
-            <h3 class="text-xl font-bold text-[#580c12] mb-1 uppercase tracking-wide font-heading">Hak Akses Dokumen</h3>
-            <p class="text-xs text-gray-500 mb-6">Mohon isi data verifikasi instansi Anda secara valid untuk membuka dokumen legalitas resmi PT. ESU.</p>
+            <h3 class="text-lg sm:text-xl font-bold text-[#580c12] mb-1 uppercase tracking-wide font-heading">Hak Akses Dokumen</h3>
+            <p class="text-xs text-gray-500 mb-5">Mohon isi data verifikasi instansi Anda secara valid untuk membuka dokumen legalitas resmi PT. ESU.</p>
             
             <form id="legalitasForm" onsubmit="handleFormSubmission(event)" class="space-y-4">
                 <div>
                     <label class="block text-xs font-bold uppercase text-gray-700 mb-1">Nama Lengkap</label>
-                    <input type="text" id="clientName" required class="w-full px-4 py-2.5 text-sm bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:border-[#ba8b25] focus:bg-white transition-all">
+                    <input type="text" id="clientName" required class="w-full px-4 py-2 sm:py-2.5 text-sm bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:border-[#ba8b25] focus:bg-white transition-all">
                 </div>
                 <div>
                     <label class="block text-xs font-bold uppercase text-gray-700 mb-1">No. Handphone / WhatsApp</label>
-                    <input type="tel" id="clientPhone" required placeholder="08xxxxxxxxxx" class="w-full px-4 py-2.5 text-sm bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:border-[#ba8b25] focus:bg-white transition-all">
+                    <input type="tel" id="clientPhone" required placeholder="08xxxxxxxxxx" class="w-full px-4 py-2 sm:py-2.5 text-sm bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:border-[#ba8b25] focus:bg-white transition-all">
                 </div>
                 <div>
                     <label class="block text-xs font-bold uppercase text-gray-700 mb-1">Email Perusahaan / Instansi</label>
-                    <input type="email" id="clientEmail" required placeholder="nama@instansi.com" class="w-full px-4 py-2.5 text-sm bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:border-[#ba8b25] focus:bg-white transition-all">
+                    <input type="email" id="clientEmail" required placeholder="nama@instansi.com" class="w-full px-4 py-2 sm:py-2.5 text-sm bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:border-[#ba8b25] focus:bg-white transition-all">
                 </div>
-                <button type="submit" id="submitBtn" class="w-full py-3.5 bg-[#580c12] hover:bg-[#3d070b] text-white font-bold rounded-xl text-xs uppercase tracking-wider shadow-md transition-all duration-300 cursor-pointer border-none flex items-center justify-center gap-2">
+                
+                <div id="loaderArea" class="hidden flex flex-col items-center justify-center py-2 gap-3">
+                    <div class="corporate-spinner"></div>
+                    <span class="text-[11px] font-bold uppercase tracking-wider text-[#580c12]">Mengamankan Jalur Enkripsi...</span>
+                </div>
+
+                <button type="submit" id="submitBtn" class="w-full py-3.5 bg-[#580c12] hover:bg-[#3d070b] text-white font-bold rounded-xl text-xs uppercase tracking-wider shadow-md transition-all duration-300 cursor-pointer border-none flex items-center justify-center">
                     <span id="btnText">Validasi & Buka Dokumen</span>
                 </button>
             </form>
@@ -490,25 +518,25 @@
     </div>
 
     <div id="secureDocModal" class="modal-blur-overlay">
-        <div class="bg-white p-6 rounded-3xl max-w-4xl w-full shadow-2xl relative mx-4 flex flex-col">
+        <div class="bg-white p-4 sm:p-6 rounded-3xl max-w-4xl w-full max-h-[95vh] shadow-2xl relative mx-3 sm:mx-4 flex flex-col">
             <div class="flex justify-between items-center border-b border-gray-100 pb-3 mb-4">
-                <div class="flex items-center gap-2 text-[#580c12] font-bold text-xs uppercase tracking-wider font-heading">
+                <div class="flex items-center gap-2 text-[#580c12] font-bold text-[10px] sm:text-xs uppercase tracking-wider font-heading">
                     <i class="fa-solid fa-circle-shield text-green-600 animate-pulse"></i> Console Dokumen Resmi View-Only
                 </div>
-                <button onclick="closeSecureDocModal()" class="px-4 py-1.5 bg-red-50 text-red-600 font-bold rounded-lg text-xs hover:bg-red-100 transition-colors cursor-pointer border-none">
+                <button onclick="closeSecureDocModal()" class="px-3 sm:px-4 py-1.5 bg-red-50 text-red-600 font-bold rounded-lg text-xs hover:bg-red-100 transition-colors cursor-pointer border-none">
                     Tutup Akses
                 </button>
             </div>
             
             <div class="secure-view-container" id="secureViewer">
                 <div class="secure-overlay-watermark"></div>
-                <div class="p-4 space-y-6 select-none flex flex-col items-center">
+                <div class="p-2 sm:p-4 space-y-6 select-none flex flex-col items-center">
                     <img src="assets/images/legalitas-1.png" alt="Legalitas Dokumen Utama" class="w-full max-w-3xl border border-gray-200 shadow-sm pointer-events-none object-contain">
                 </div>
             </div>
             
-            <div class="text-center mt-3 text-[10px] text-gray-400 font-medium">
-                Dokumen dilindungi oleh enkapsulasi firewall internal PT. ESU. Hak cipta terikat hukum. Segala jenis screenshot, simpan berkas, cetak dokumen, atau bypass elemen diblokir otomatis.
+            <div class="text-center mt-3 text-[9px] sm:text-[10px] text-gray-400 font-medium px-2">
+                Dokumen terenkapsulasi firewall internal PT. ESU. Segala jenis screenshot, simpan berkas, cetak, atau duplikasi diblokir otomatis.
             </div>
         </div>
     </div>
@@ -516,26 +544,13 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
     <script>
-        // Init AOS Animation
-        AOS.init({
-            once: true,
-            duration: 1000
-        });
+        AOS.init({ once: true, duration: 1000 });
 
         // Sticky Navigation Header Script
         window.addEventListener('scroll', function() {
             const header = document.getElementById('mainHeader');
-            const burgerBtn = document.getElementById('burgerBtn');
-            
-            if (window.scrollY > 40) {
-                header.classList.add('header-scrolled', 'py-3');
-                header.classList.remove('py-5');
-                if(burgerBtn) burgerBtn.style.color = '#580c12';
-            } else {
-                header.classList.remove('header-scrolled', 'py-3');
-                header.classList.add('py-5');
-                if(burgerBtn) burgerBtn.style.color = '#580c12';
-            }
+            if (window.scrollY > 40) header.classList.add('header-scrolled', 'py-3');
+            else header.classList.remove('header-scrolled', 'py-3');
         });
 
         // Mobile Menu Toggle
@@ -558,8 +573,7 @@
            CORE INTERACTION: GOOGLE SHEETS & FIREWALL
            ========================================== */
         
-        // CATATAN WAJIB: Ganti tautan ini dengan URL Web App hasil Deploy Apps Script Anda!
-        const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxKfwRnpNw_Fbv4s8ZnRXR48rDnvM2NBIUVMpDG44_aU177r20Xt6-oFKsfq0HL4cSIXw/exec";
+        const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzbQekoaw7krRs3tq-3PFXIhkQFElO050fwH5TySfoyyJvMq38z1D6h1zW5NUHEVqYQbQ/exec";
 
         function openFormModal() {
             document.getElementById('formModal').classList.add('active');
@@ -571,16 +585,19 @@
         
         function closeSecureDocModal() {
             document.getElementById('secureDocModal').classList.remove('active');
+            // Matikan pertahanan blur saat modal ditutup
+            document.getElementById('secureViewer').classList.remove('blurred-defense');
         }
 
-        // Pengiriman Data Form Validasi ke Google Sheets dengan Efek Loading Spinner
+        // Pengiriman Data Form Validasi ke Google Sheets dengan Efek Custom Loading Desain Utama
         function handleFormSubmission(event) {
             event.preventDefault();
             const submitBtn = document.getElementById('submitBtn');
+            const loaderArea = document.getElementById('loaderArea');
             
-            // FIXED: Mengubah button menjadi loading state interaktif
-            submitBtn.disabled = true;
-            submitBtn.innerHTML = `<i class="fa-solid fa-circle-notch animate-spin text-sm"></i> <span>Memproses Validasi...</span>`;
+            // Tampilkan custom loader premium, sembunyikan button bawaan
+            submitBtn.classList.add('hidden');
+            loaderArea.classList.remove('hidden');
 
             const payload = {
                 nama: document.getElementById('clientName').value,
@@ -589,37 +606,36 @@
                 timestamp: new Date().toLocaleString('id-ID')
             };
 
-            // Kirim data secara asynchronous ke sistem Google Web App
             fetch(GOOGLE_SCRIPT_URL, {
                 method: "POST",
                 mode: "no-cors",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify(payload)
             }).then(() => {
-                // Kembalikan tombol ke keadaan normal
+                // Sembunyikan loader, kembalikan button keadaan semula
                 closeFormModal();
                 document.getElementById('legalitasForm').reset();
-                submitBtn.disabled = false;
-                submitBtn.innerHTML = `<span id="btnText">Validasi & Buka Dokumen</span>`;
+                submitBtn.classList.remove('hidden');
+                loaderArea.classList.add('hidden');
                 
                 // Munculkan Panel View-Only Secure Console
                 document.getElementById('secureDocModal').classList.add('active');
                 initiateAntiScreenshotDefenses();
             }).catch(err => {
                 alert("Gangguan koneksi database. Silakan periksa jaringan internet Anda.");
-                submitBtn.disabled = false;
-                submitBtn.innerHTML = `<span id="btnText">Validasi & Buka Dokumen</span>`;
+                submitBtn.classList.remove('hidden');
+                loaderArea.classList.add('hidden');
             });
         }
 
-        // Inisialisasi Kunci Firewall Anti-Screenshot & Copy Paste
+        // Kunci Pertahanan Anti-Screenshot & Capture Khusus HP & Laptop
         function initiateAntiScreenshotDefenses() {
             const viewer = document.getElementById('secureViewer');
 
-            // 1. Blokir Fungsi Klik Kanan di Dalam Area Viewer Dokumen
+            // 1. Blokir Klik Kanan (Desktop/Laptop)
             viewer.addEventListener('contextmenu', e => e.preventDefault());
 
-            // 2. Blokir Kombinasi Tombol Simpan (Ctrl+S / Cmd+S), Cetak (Ctrl+P / Cmd+P), dan Copy (Ctrl+C)
+            // 2. Blokir Kombinasi Tombol Pintasan Keydown (Laptop/PC)
             document.addEventListener('keydown', function(e) {
                 if (e.ctrlKey && (e.key === 's' || e.key === 'p' || e.key === 'u' || e.key === 'c')) {
                     e.preventDefault();
@@ -629,10 +645,35 @@
                 }
             });
 
-            // 3. Modifikasi Data Clipboard Menjadi Kosong Otomatis Saat Mencoba Menyalin Teks/Konten
+            // 3. Rekayasa Clipboard Kosong Otomatis
             document.addEventListener('copy', e => {
-                e.clipboardData.setData('text/plain', 'Akses Diblokir - Dokumen PT. Empat Sinergi Utama Bersifat Rahasia View-Only.');
+                e.clipboardData.setData('text/plain', 'Akses Diblokir - Dokumen PT. ESU Bersifat Rahasia.');
                 e.preventDefault();
+            });
+
+            // 4. FIREWALL UTAMA HP & LAPTOP (BLUR ON LOST FOCUS / APP SWITCH)
+            // Sistem ini mendeteksi jika user mencoba menekan kombinasi tombol screenshot di HP, 
+            // karena saat tombol ditekan, OS HP akan mengambil alih fokus layar sepersekian detik.
+            window.addEventListener('blur', () => {
+                viewer.classList.add('blurred-defense');
+            });
+            
+            window.addEventListener('focus', () => {
+                // Beri jeda sedikit saat fokus kembali agar hasil tangkapan layar OS tetap berupa gambar blur/hitam
+                setTimeout(() => {
+                    viewer.classList.remove('blurred-defense');
+                }, 400);
+            });
+
+            // Ekstra Pengaman Dokumen jika aplikasi berpindah ke latar belakang (Multi-tasking view HP)
+            document.addEventListener('visibilitychange', () => {
+                if (document.hidden) {
+                    viewer.classList.add('blurred-defense');
+                } else {
+                    setTimeout(() => {
+                        viewer.classList.remove('blurred-defense');
+                    }, 400);
+                }
             });
         }
     </script>
